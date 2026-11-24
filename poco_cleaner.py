@@ -183,7 +183,7 @@ class PhoneFixer(tk.Tk):
         self.serial: str | None = None
         self.records: list[AppRecord] = []
         self.checked: set[str] = set()
-        self.show_system = tk.BooleanVar(value=False)
+        self.show_system = tk.BooleanVar(value=True)
         self.search = tk.StringVar()
         self.status = tk.StringVar(value="Connect your POCO to begin.")
         self.device = tk.StringVar(value="No device connected")
@@ -244,7 +244,7 @@ class PhoneFixer(tk.Tk):
                          font=("Segoe UI", 10))
         entry.pack(side="left", fill="x", expand=True, ipady=8)
         entry.bind("<KeyRelease>", lambda _e: self.render())
-        tk.Checkbutton(toolbar, text="Show protected system apps",
+        tk.Checkbutton(toolbar, text="Show protected system apps (locked)",
                        variable=self.show_system, command=self.render, bg=self.BG,
                        fg=self.MUTED, activebackground=self.BG, activeforeground=self.FG,
                        selectcolor=self.PANEL2, font=("Segoe UI", 9)).pack(side="left", padx=14)
