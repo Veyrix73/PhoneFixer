@@ -12,6 +12,7 @@ There is no Python requirement, no APK to install on the phone, and no root acce
 - Scroll with the mouse wheel.
 - Uses USB debugging over a USB cable.
 - Keeps the phone awake while connected.
+- Uses scrcpy UHID mode for mouse and keyboard, simulating physical input devices instead of Android API-level input injection.
 
 ## 1. Download PhoneFixer
 
@@ -56,7 +57,7 @@ Menu names can vary depending on your Android version and phone manufacturer.
 
 Double-click **run.bat**.
 
-The phone screen will open in its own window. Use your mouse to tap, drag, and scroll; type with your PC keyboard.
+The phone screen will open in its own window. The launcher enables scrcpy UHID mode to simulate a physical mouse and keyboard, which may work on some Xiaomi/POCO devices where ordinary input injection is blocked. Use your mouse to tap, drag, and scroll; type with your PC keyboard. If UHID is unsupported by your phone firmware, the terminal will show an error.
 
 If Windows asks whether to allow the connection, check that the program is the official scrcpy download you installed.
 
