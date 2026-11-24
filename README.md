@@ -1,88 +1,74 @@
 # PhoneFixer
 
-PhoneFixer is a Windows desktop controller for viewing and interacting with an Android phone over USB. It uses **ADB only**: no scrcpy, no screen-mirroring APK, and no permanent app installed on the phone.
+PhoneFixer is a lightweight Windows launcher for **scrcpy**. It opens your Android phone screen on your PC so you can control it with your mouse and keyboard.
+
+There is no Python requirement, no APK to install on the phone, and no root access required.
 
 ## Features
 
-- Detects connected Android phones and shows model, Android version, and battery level.
-- Shows the phone screen inside the PhoneFixer window using repeated ADB screenshots.
-- Click the preview to tap the phone; click and drag to swipe.
-- Use the mouse wheel to scroll.
-- Send text from the PC keyboard using the text field.
-- Back, Home, Recent Apps, and volume controls.
-- Selectable preview refresh rate.
+- Live Android screen mirrored in a desktop window.
+- Mouse clicks and drags control taps and swipes.
+- PC keyboard input.
+- Scroll with the mouse wheel.
+- Uses USB debugging over a USB cable.
+- Keeps the phone awake while connected.
 
-## Important performance note
+## 1. Download PhoneFixer
 
-This is a simple ADB screenshot preview, not a low-latency video stream. Expect a few screen updates per second, depending on the phone and USB connection. It does not stream phone audio. For smoother video and lower latency, a dedicated screen-streaming implementation is needed.
+Download this repository using **Code → Download ZIP**, then extract it.
 
-## Requirements
+## 2. Download the official scrcpy Windows release
 
-- Windows 10 or 11.
-- Python 3.10+ to run from source, or use the EXE build.
-- Google's official Android SDK Platform-Tools (ADB).
-- A USB data cable.
-- Pillow (installed by the setup/build scripts).
+Download the latest Windows 64-bit ZIP from the official scrcpy project:
 
-## 1. Download ADB Platform-Tools
+https://github.com/Genymobile/scrcpy/releases/latest
 
-Download Google's official Platform-Tools:
+The official Windows instructions and release files are maintained by Genymobile. Do not download scrcpy from unofficial websites.
 
-https://developer.android.com/tools/releases/platform-tools
+Extract the ZIP. Copy the contents of the extracted release folder into the **scrcpy** folder inside PhoneFixer.
 
-Extract the ZIP. Copy the extracted **platform-tools** folder into this project, next to **main.py**. Check that this file exists:
+Your folder should look like this:
 
     PhoneFixer/
-      main.py
+      README.md
       run.bat
-      build.bat
-      requirements.txt
-      platform-tools/
+      scrcpy/
+        scrcpy.exe
         adb.exe
-        AdbWinApi.dll
-        AdbWinUsbApi.dll
-        ...
+        scrcpy-server
+        SDL2.dll
+        ...other files from the official ZIP...
 
-Do not rename adb.exe. Keep the DLL files and other Platform-Tools files together.
+Keep the files from the official ZIP together. Do not copy only scrcpy.exe.
 
-## 2. Enable USB debugging
+## 3. Enable USB debugging on Android
 
-1. On the phone, open **Settings → About phone**.
+1. Open **Settings → About phone**.
 2. Tap **OS version** several times to enable Developer options.
 3. Open **Settings → Additional settings → Developer options**.
 4. Enable **USB debugging**.
-5. Connect the phone to the PC with a USB data cable and unlock it.
-6. Approve the **Allow USB debugging?** prompt on the phone.
+5. Connect the phone to your PC using a USB data cable and unlock it.
+6. Approve the **Allow USB debugging?** prompt on the phone. Only approve a computer you trust.
 
-The exact menu names can vary by Android version and phone manufacturer. Only approve a computer you trust.
+Menu names can vary depending on your Android version and phone manufacturer.
 
-## 3. Run PhoneFixer
+## 4. Start PhoneFixer
 
-Double-click **run.bat**. On first run it installs the Pillow image library if needed.
+Double-click **run.bat**.
 
-Or run these commands from the project folder:
+The phone screen will open in its own window. Use your mouse to tap, drag, and scroll; type with your PC keyboard.
 
-    python -m pip install -r requirements.txt
-    python main.py
-
-Press **Refresh phone**, select the device, and click **Start live preview**. Click or drag on the displayed phone screen to tap or swipe. Use the text field to send text.
-
-## Build a Windows EXE
-
-1. Put Google's complete Platform-Tools folder beside main.py as **platform-tools**.
-2. Run **build.bat**.
-3. The EXE will be created at **dist/PhoneFixer.exe**.
-
-The EXE bundles ADB and the required Platform-Tools files. You do not need to install scrcpy.
+If Windows asks whether to allow the connection, check that the program is the official scrcpy download you installed.
 
 ## Troubleshooting
 
-- **No authorized phone found:** unlock the phone and approve the USB debugging prompt.
-- **Phone does not appear:** try a different USB data cable or port. Some cables only charge.
-- **ADB missing:** check that **platform-tools/adb.exe** exists.
-- **Preview is slow:** lower the preview rate in the controls. Screenshot-based preview is intentionally simpler but less fluid than a video stream.
-- **Controls do not work:** keep the phone unlocked and check that USB debugging authorization is still active.
+- **Phone not detected:** unlock it, reconnect the cable, and approve the USB debugging prompt.
+- **Only charging:** use a USB data cable and try another USB port.
+- **Window closes with an error:** run **run.bat** again and read the message in the terminal.
+- **Mouse or keyboard input is blocked:** on some Xiaomi/POCO devices, Android may require enabling the additional **USB debugging (Security settings)** option in Developer options. Only change this setting if you understand and trust the PC connection.
 
-## Privacy and safety
+## About scrcpy
 
-PhoneFixer communicates with the phone over the locally connected ADB interface. It does not root the phone, unlock its bootloader, flash firmware, install an APK, or use a cloud relay. The first USB debugging connection requires approval on the phone. You can revoke this computer's authorization in Android Developer options.
+scrcpy is the screen mirroring and control engine. It streams the phone display to your PC and forwards mouse and keyboard input. It does not require root or a permanently installed Android app.
+
+Official project: https://github.com/Genymobile/scrcpy
