@@ -1,49 +1,88 @@
 # PhoneFixer
 
-A conservative Windows app manager for a connected POCO / Android phone.
+PhoneFixer is a Windows desktop controller for viewing and controlling an Android phone over USB.
 
-## Features
+**The old app-uninstaller has been removed.** PhoneFixer no longer lists apps or sends uninstall commands.
 
-- Scans installed packages and displays them in a searchable list.
-- Shows a friendly name for common apps plus the exact package ID.
-- Displays package category and version code when Android reports it.
-- Selects multiple third-party apps with checkboxes.
-- Bulk-uninstalls selected third-party apps.
-- Optionally shows protected system packages as locked, non-selectable rows.
-- Shows the connected device model, Android version, MIUI/HyperOS version (when reported), and battery percentage.
+## What it does
 
-## Safety
+- Detects Android phones connected through ADB.
+- Shows the phone model, Android version, and battery level.
+- Opens the live Android screen in a dedicated scrcpy window.
+- Lets you use your PC mouse, scroll wheel, and keyboard to interact with the phone.
+- Offers resolution, frame-rate, and bitrate settings.
+- Can stop the screen-mirroring process from the PhoneFixer window.
 
-Only packages reported by Android's `pm list packages -3` are selectable. All other packages are marked as protected system apps and cannot be selected. The uninstall function checks this allow-list again before sending commands.
-
-The app uses `pm uninstall --user 0`. It does not root the phone, unlock the bootloader, flash firmware, or modify partitions. Uninstalling an app can delete its local data. Only remove apps you recognize and no longer need; start with one or two and check that the phone still works normally.
+The screen appears in a separate window opened by scrcpy. PhoneFixer is the connection and settings panel; scrcpy handles live video and input.
 
 ## Requirements
 
-- Windows 10 or 11
-- Python 3.10+ (to run from source or build the EXE)
-- Google's Android SDK Platform-Tools (ADB)
-- USB data cable
+- Windows 10 or 11 (64-bit recommended).
+- Python 3.10+ to run from source, or use the EXE build.
+- The official Windows scrcpy release.
+- A USB data cable.
 
-Download Platform-Tools from Google's official page:  
-https://developer.android.com/tools/releases/platform-tools
+## 1. Download scrcpy
 
-## Connect your POCO
+Download the official Windows release from:
 
-1. On the phone, open **Settings → About phone** and tap **OS version** several times to enable Developer options.
-2. Open **Settings → Additional settings → Developer options**.
-3. Enable **USB debugging**.
-4. Connect the phone to the PC and unlock it.
-5. Accept the **Allow USB debugging?** prompt on the phone.
-6. Extract Google's Platform-Tools into this project folder as `platform-tools` (so `platform-tools/adb.exe` exists), or add the Platform-Tools folder to Windows `PATH`.
-7. Run `run_poco_cleaner.bat` or use `python poco_cleaner.py`.
+https://github.com/Genymobile/scrcpy/releases/latest
+
+Extract the ZIP. Copy the contents of the extracted folder into the **scrcpy** folder beside **main.py**.
+
+The folder should look like this:
+
+    PhoneFixer/
+      main.py
+      run.bat
+      build.bat
+      scrcpy/
+        scrcpy.exe
+        adb.exe
+        scrcpy-server
+        SDL2.dll
+        ...the other files from the release...
+
+Do not download scrcpy from third-party download sites. The official project is maintained by Genymobile.
+
+## 2. Enable USB debugging on Android
+
+1. Open **Settings → About phone**.
+2. Tap **OS version** several times to enable Developer options.
+3. Open **Settings → Additional settings → Developer options**.
+4. Enable **USB debugging**.
+5. Connect the phone to the PC with a USB data cable and unlock the phone.
+6. Approve the **Allow USB debugging?** prompt. Review the computer's RSA fingerprint before allowing it.
+
+Menu names can vary between Android versions and phone manufacturers.
+
+## 3. Run PhoneFixer
+
+Double-click **run.bat**, or run:
+
+    python main.py
+
+Press **Refresh phone**, select the connected device, then press **Start phone screen**.
+
+Use the scrcpy window to click, scroll, and type. The PhoneFixer window stays open for device selection and mirroring settings.
 
 ## Build a Windows EXE
 
-Run `build_exe.bat`. It installs PyInstaller and creates `dist\\PhoneFixer.exe`.
+1. Put the complete official scrcpy release contents in the **scrcpy** folder.
+2. Run **build.bat**.
+3. The executable will be created at **dist/PhoneFixer.exe**.
 
-For a portable EXE with ADB bundled, put the official Platform-Tools folder in this project as `platform-tools` before running the build script. Otherwise, the EXE will look for ADB on Windows `PATH`.
+The build includes the scrcpy folder inside the EXE. The generated EXE can be moved to another Windows PC; the phone still needs USB debugging enabled and must approve that PC.
 
-## App names
+## Troubleshooting
 
-Android's basic package-list command provides package IDs, not localized display labels. PhoneFixer maps common package IDs to familiar names and always shows the exact package ID. Unknown package names are shown in a readable form rather than pretending to know the official app title.
+- **No authorized phone found:** unlock the phone, reconnect the cable, and approve the USB debugging prompt.
+- **Phone does not appear:** try another USB data cable or USB port. Some cables only charge.
+- **scrcpy / ADB not installed:** check that **scrcpy.exe** and **adb.exe** are inside the project's scrcpy folder.
+- **Screen opens and closes:** check the status message in PhoneFixer. Reconnect the phone and press Refresh phone.
+
+## Safety and privacy
+
+PhoneFixer uses Android Debug Bridge (ADB) and scrcpy. It does not root the phone, unlock the bootloader, flash firmware, or install a permanent control app. Android displays a USB debugging approval prompt before this computer can access the device. Disconnect the cable or revoke this computer's USB debugging authorization in Developer options to end that trust relationship.
+
+The phone screen is shown locally on your PC. No PhoneFixer account or cloud service is used.
