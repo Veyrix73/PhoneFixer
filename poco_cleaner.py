@@ -258,8 +258,14 @@ class PhoneFixer(tk.Tk):
         tk.Label(bar, textvariable=self.count, bg=self.PANEL, fg=self.MUTED,
                  font=("Segoe UI", 9)).pack(side="right")
 
+        # Create the table as a direct child of its visible container.
+        # Using pack(in_=...) with a different parent can leave the table invisible
+        # on some Tk builds even though rows are successfully inserted.
+        area = tk.Frame(box, bg=self.PANEL)
+        area.pack(fill="both", expand=True, padx=10, pady=(0, 8))
+
         cols = ("check", "app", "type", "package", "version")
-        self.tree = ttk.Treeview(box, columns=cols, show="headings", selectmode="browse")
+        self.tree = ttk.Treeview(area, columns=cols, show="headings", selectmode="browse")
         for key, label in (("check", "SELECT"), ("app", "APP"), ("type", "CATEGORY"),
                            ("package", "PACKAGE ID"), ("version", "VERSION CODE")):
             self.tree.heading(key, text=label)
@@ -272,9 +278,7 @@ class PhoneFixer(tk.Tk):
         self.tree.tag_configure("system", foreground="#93a0b0")
         self.tree.bind("<Button-1>", self._click)
         self.tree.bind("<<TreeviewSelect>>", self._selection)
-        area = tk.Frame(box, bg=self.PANEL)
-        area.pack(fill="both", expand=True, padx=10, pady=(0, 8))
-        self.tree.pack(in_=area, side="left", fill="both", expand=True)
+        self.tree.pack(side="left", fill="both", expand=True)
         ybar = ttk.Scrollbar(area, orient="vertical", command=self.tree.yview)
         ybar.pack(side="right", fill="y")
         xbar = ttk.Scrollbar(box, orient="horizontal", command=self.tree.xview)
