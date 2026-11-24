@@ -183,7 +183,7 @@ class PhoneFixer(tk.Tk):
         self.serial: str | None = None
         self.records: list[AppRecord] = []
         self.checked: set[str] = set()
-        self.show_system = tk.BooleanVar(value=True)
+        self.show_system = tk.BooleanVar(value=False)
         self.search = tk.StringVar()
         self.status = tk.StringVar(value="Connect your POCO to begin.")
         self.device = tk.StringVar(value="No device connected")
@@ -215,11 +215,20 @@ class PhoneFixer(tk.Tk):
     def _ui(self):
         head = tk.Frame(self, bg=self.BG)
         head.pack(fill="x", padx=22, pady=(18, 12))
+        # Draw a built-in logo so no separate image file is needed.
+        logo = tk.Canvas(head, width=58, height=58, bg=self.BG, highlightthickness=0)
+        logo.pack(side="left", padx=(0, 13))
+        logo.create_rectangle(3, 3, 55, 55, fill="#203b5b", outline="#355f89", width=2)
+        logo.create_rectangle(19, 9, 39, 47, fill="#10151d", outline="#8fc5ff", width=2)
+        logo.create_rectangle(22, 14, 36, 38, fill="#29496d", outline="")
+        logo.create_oval(27, 41, 31, 45, fill="#8fc5ff", outline="")
+        logo.create_line(40, 10, 48, 3, fill="#f2c66d", width=3)
+        logo.create_line(43, 19, 53, 19, fill="#f2c66d", width=2)
         title = tk.Frame(head, bg=self.BG)
         title.pack(side="left", fill="x", expand=True)
         tk.Label(title, text="PhoneFixer", bg=self.BG, fg=self.FG,
                  font=("Segoe UI", 22, "bold")).pack(anchor="w")
-        tk.Label(title, text="See what's installed. Choose what you actually want to remove.",
+        tk.Label(title, text="Manage your POCO apps safely.",
                  bg=self.BG, fg=self.MUTED, font=("Segoe UI", 10)).pack(anchor="w", pady=(2, 0))
         self.button(head, "Connect / Refresh", self.connect, True).pack(side="right")
 
@@ -244,7 +253,7 @@ class PhoneFixer(tk.Tk):
                          font=("Segoe UI", 10))
         entry.pack(side="left", fill="x", expand=True, ipady=8)
         entry.bind("<KeyRelease>", lambda _e: self.render())
-        tk.Checkbutton(toolbar, text="Show protected system apps (locked)",
+        tk.Checkbutton(toolbar, text="Show system apps (locked)",
                        variable=self.show_system, command=self.render, bg=self.BG,
                        fg=self.MUTED, activebackground=self.BG, activeforeground=self.FG,
                        selectcolor=self.PANEL2, font=("Segoe UI", 9)).pack(side="left", padx=14)
