@@ -502,7 +502,7 @@ class PhoneFixer(tk.Tk):
     def _mouse_wheel(self, event: tk.Event) -> None:
         if not self.last_image or not self.selected_serial:
             return
-        amount = -1 if event.delta > 0 else 1
+        amount = 1 if event.delta > 0 else -1
         x = self.last_image.width // 2
         y = self.last_image.height // 2
         offset = max(220, self.last_image.height // 5)
@@ -535,7 +535,7 @@ class PhoneFixer(tk.Tk):
         if not value:
             return
         # Android's input command uses %s as its representation for a space.
-        safe_text = value.replace("%", "%25").replace(" ", "%s")
+        safe_text = value.replace(" ", "%s")
         self._send_input(["text", safe_text])
         self.text_var.set("")
 
