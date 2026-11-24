@@ -21,7 +21,7 @@ pushd "%~dp0scrcpy"
 echo Starting PhoneFixer...
 echo Connect your Android phone and approve USB debugging if prompted.
 echo.
-scrcpy.exe --window-title="PhoneFixer" --max-size=1600 --max-fps=60 --video-bit-rate=8M --stay-awake --pause-on-exit=if-error
+scrcpy.exe --window-title="PhoneFixer" --max-size=1600 --max-fps=60 --video-bit-rate=8M --stay-awake --keyboard=uhid --mouse=uhid --pause-on-exit=if-error
 set "SCRCPY_EXIT=%ERRORLEVEL%"
 popd
 
